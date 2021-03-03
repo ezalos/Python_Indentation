@@ -2,14 +2,20 @@ import re
 import os
 import argparse
 
-def replace(before, after, file):
-	reg_before = r"(^|\n)(" + after + r")*" + before #+ "|" + after + ")"
+
+def replace(before, after, file_content):
+	if after == "\t":
+		reg_before = r"(^|\n)([" + after + r"]*)" + before  # + "|" + after + ")"
+	else:
+		reg_before = r"(^|\n)(" + after + r")*" + before  # + "|" + after + ")"
+	"(^|\n)(\t)*    "
+	"\1\2\t\t"
 	reg_after = r"\1\2" + after
-	lag = file
+	lag = file_content
 	text_after = ""
-	while file != text_after:
-		file = lag
-		text_after = re.sub(reg_before, reg_after, file)
+	while file_content != text_after:
+		file_content = lag
+		text_after = re.sub(reg_before, reg_after, file_content)
 		lag = text_after
 	return text_after
 
@@ -38,10 +44,10 @@ if __name__ == "__main__":
 
 	if args.indentation == 't':
 		aft = '\t'
-		bef = '    '
+		bef = ' ' * 4
 	else:
 		bef = '\t'
-		aft = '    '
+		aft = ' ' * 4
 
 	if args.file != None:
 		file_indent(bef, aft, args.file)
