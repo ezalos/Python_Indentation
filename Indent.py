@@ -2,6 +2,25 @@ import re
 import os
 import argparse
 
+def get_modified_lines_numbers(prv, aft, data):
+	prv_lines = prv.split("\n")
+	aft_lines = aft.split("\n")
+	for i, (p, a) in enumerate(zip(prv_lines, aft_lines)):
+		if p != a:
+			data[i + 1] = True
+	return data
+
+def print_modifs(modifs):
+	out = ""
+	keys = modifs.keys()
+	for k in keys:
+		out += " " * 4 + "line: " + str(k) + "\n"
+	if len(keys) == 0:
+		out += "No line were modified"
+	else:
+		out += "Were modified"
+	print(out)
+
 
 def replace(before, after, file_content):
 	if after == "\t":
@@ -13,20 +32,21 @@ def replace(before, after, file_content):
 	reg_after = r"\1\2" + after
 	lag = file_content
 	text_after = ""
+	list_modifs = {}
 	while file_content != text_after:
 		file_content = lag
 		text_after = re.sub(reg_before, reg_after, file_content)
+		list_modifs = get_modified_lines_numbers(file_content, text_after, list_modifs)
 		lag = text_after
-	return text_after
+	return text_after, list_modifs
 
 def file_indent(bef, aft, filename):
 	if filename[-3:] == ".py":
 		print("Taking care of: " + filename)
 		with open(filename, "r") as f:
 			origin = f.read()
-		content = replace(bef, aft, origin)
-		if content != origin:
-			print("Different")
+		content, modifs = replace(bef, aft, origin)
+		print_modifs(modifs)
 		with open(filename, "w") as f:
 			f.write(content)
 	else:
