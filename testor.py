@@ -55,19 +55,10 @@ if __name__ == "__main__":
 	mypath = "tests_copy"
 	files = get_file_list(mypath)
 	Bc = BinCute("python3 Indent.py")
-	ex = BinCute("python3")
 	for f in files:
 		print("-" * 30)
 		Bc.prepare_command("-f '" + f + "'")
 		Bc.launch()
 		print(Bc.stdout)
 		print(Bc.stderr)
-		if not Bc.stderr:
-			ex.prepare_command("'" + f + "'")
-			ex.launch()
-			if ex.stderr:
-				print("Error for file " + f + " :\n" + Bc.stderr + "\n" + Bc.stdout)
-			else:
-				print(f + ":\tGOOD")
-
 
