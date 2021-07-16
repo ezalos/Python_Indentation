@@ -13,13 +13,12 @@ def get_modified_lines_numbers(prv, aft, data):
 def print_modifs(modifs):
 	out = ""
 	keys = modifs.keys()
-	if len(keys) != 0:
-		out += "line: " if len(keys) == 1 else "lines: "
+	if len(keys) > 0:
+		out += "Modified line"
+		out += "" if len(keys) == 1 else "s"
+		out += ": "
 		for k in keys:
 			out += str(k) + " "
-		out += "\n"
-		out += "Was " if len(keys) == 1 else "Were "
-		out += "modified"
 	else:
 		out += "No line was modified"
 	print(out)
@@ -45,7 +44,7 @@ def replace(before, after, file_content):
 
 def file_indent(bef, aft, filename):
 	if filename[-3:] == ".py":
-		print("Taking care of: " + filename)
+		print("Indenting " + filename)
 		with open(filename, "r") as f:
 			origin = f.read()
 		content, modifs = replace(bef, aft, origin)
@@ -53,7 +52,7 @@ def file_indent(bef, aft, filename):
 		with open(filename, "w") as f:
 			f.write(content)
 	else:
-		print("This program only works with *.py files.")
+		print("Indent only works with *.py files.")
 		print(filename + " is not compatible")
 
 if __name__ == "__main__":

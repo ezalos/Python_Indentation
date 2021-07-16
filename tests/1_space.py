@@ -5,7 +5,7 @@ import re
 import platform
 
 class BinCute():
-	def __init__(self, binary, leaks=False):
+    def __init__(self, binary, leaks=False):
 		self.binary = binary
 		self.command = ""
 		self.raw_output = None
@@ -27,7 +27,7 @@ class BinCute():
 	  t = time.process_time()
 	  # print(self.command)
 	  self.raw_output = subprocess.run(self.command, stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE, shell=True)
+										stderr=subprocess.PIPE, shell=True)
 	  self.time = time.process_time() - t
 	  self.stdout = self.raw_output.stdout.decode('utf-8')
 	  self.stderr = self.raw_output.stderr.decode('utf-8')
@@ -59,6 +59,6 @@ if __name__ == "__main__":
 		print("-" * 30)
 		Bc.prepare_command("-f '" + f + "'")
 		Bc.launch()
-		print(Bc.stdout, end="")
-		print(Bc.stderr, end="")
+		print(Bc.stdout)
+		print(Bc.stderr)
 
