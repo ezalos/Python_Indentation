@@ -43,7 +43,7 @@ def replace(before, after, file_content):
 	return text_after, list_modifs
 
 def file_indent(bef, aft, filename):
-	if filename[-3:] == ".py":
+	if os.path.isfile(filename) and filename[-3:] == ".py":
 		print("Indenting " + filename)
 		with open(filename, "r") as f:
 			origin = f.read()
@@ -54,6 +54,13 @@ def file_indent(bef, aft, filename):
 	else:
 		print("Indent only works with *.py files.")
 		print(filename + " is not compatible")
+
+def directory_indent(bef, aft, dirname):
+	for root, dirs, files in os.walk(dirname, topdown=False):
+		for name in files:
+			if name[-3:] == ".py":
+				file_indent(bef, aft, f"{root}/{name}")
+
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
@@ -72,9 +79,13 @@ if __name__ == "__main__":
 		aft = ' ' * 4
 
 	if args.file != None:
-		file_indent(bef, aft, args.file)
+		if os.path.isfile(args.file):
+			# if not os.path.islink(self.path):
+			file_indent(bef, aft, args.file)
+		elif os.path.isdir(args.file):
+			print(f"Indenting directory {args.file}")
+			directory_indent(bef, aft, args.file)
+		else:
+			print(f"Error: {args.file} is neither a directory or a file")
 	else:
-		for root, dirs, files in os.walk(".", topdown=False):
-			for name in files:
-				if name[-3:] == ".py":
-					file_indent(bef, aft, name)
+		directory_indent(bef, aft, ".")
