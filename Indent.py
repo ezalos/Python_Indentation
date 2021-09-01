@@ -29,8 +29,8 @@ def replace(before, after, file_content):
 		reg_before = r"(^|\n)([" + after + r"]*)" + before  # + "|" + after + ")"
 	else:
 		reg_before = r"(^|\n)(" + after + r")*" + before  # + "|" + after + ")"
-	"(^|\n)(\t)*    "
-	"\1\2\t\t"
+	# "(^|\n)(\t)*    "
+	# "\1\2\t\t"
 	reg_after = r"\1\2" + after
 	lag = file_content
 	text_after = ""
@@ -67,8 +67,7 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='Here to solve inconsistencies in python files tabulation', epilog="In the hope it helps you save some precious seconds from time to time")
 	parser.add_argument("-i", "--indentation", help="Can use 4 [s]paces or 1 [t]ab. Will indent with 1 tab as default.", choices=['t', 's'], default='t')
 	group = parser.add_mutually_exclusive_group(required=True)
-	group.add_argument("-f", "--file", help="File to indent")
-	group.add_argument("-d", "--directory", help="Directory to recursively indent")
+	group.add_argument("-f", "--file", help="File or Directory to indent")
 	args = parser.parse_args()
 
 	if args.indentation == 't':
